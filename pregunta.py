@@ -18,7 +18,7 @@ def ingest_data():
     # Inserte su código aquí
     #
     #Ubicacion del archivo a leer
-    filename = 'clusters_report.txt'
+    filename = 'C:\\Users\\danii\\Documents\GitHub\\data-ingestion---clusters-report-danielvillam\\clusters_report.txt'
     #Se extrae el titulo o encabezado del archivo, teniendo en cuenta que es de dos renglones(filas)
     head = pd.read_fwf(
         filename,
@@ -47,27 +47,28 @@ def ingest_data():
     cluster = [str(line) for line in dataset[0]]
     cant_claves = [str(line) for line in dataset[1]]
     porc_claves = [str(line) for line in dataset[2]]
+    porc_claves = [line.replace(",",".") for line in porc_claves]
     princ_claves = [str(line) for line in dataset[3]]
 
     cluster_d = {}
     key = 1
     for line in cluster:
         if(line!="nan"):
-            cluster_d[key] = cluster_d.get(key,"")+line
+            cluster_d[key] = cluster_d.get(key,0)+int(line)
             key+=1
 
     cant_claves_d = {}
     key = 1
     for line in cant_claves:
         if(line!="nan"):
-            cant_claves_d[key] = cant_claves_d.get(key,"")+line
+            cant_claves_d[key] = cant_claves_d.get(key,0)+int(line)
             key+=1
 
     porc_claves_d = {}
     key = 1
     for line in porc_claves:
         if(line!="nan"):
-            porc_claves_d[key] = porc_claves_d.get(key,"")+line
+            porc_claves_d[key] = porc_claves_d.get(key,0)+float(line[:-2])
             key+=1
 
     princ_claves_d = {}
@@ -83,6 +84,13 @@ def ingest_data():
     df = pd.DataFrame(df).transpose()
     df.columns = df_columns
 
+    df['principales_palabras_clave'] = [line.replace("   ", " ") for line in df['principales_palabras_clave']]
     df['principales_palabras_clave'] = [line.replace("  ", " ") for line in df['principales_palabras_clave']]
+    df['principales_palabras_clave'] = [line.replace(".", "") for line in df['principales_palabras_clave']]
+    df['principales_palabras_clave'] = [line.replace(".", "") for line in df['principales_palabras_clave']]
+    df['principales_palabras_clave'] = [line[:-1] for line in df['principales_palabras_clave']]
 
-    return df
+    return df.principales_palabras_clave.to_list()[1] == "support vector machine, long short-term memory, back-propagation neural network, convolution neural network, speed wind prediction, energy consumption, wind power forecasting, extreme learning machine, recurrent-neural-network (rnn), radial basis function (rbf) networks, wind farm"
+
+if __name__ == "__main__":
+    print(ingest_data())

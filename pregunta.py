@@ -18,7 +18,7 @@ def ingest_data():
     # Inserte su código aquí
     #
     #Ubicacion del archivo a leer
-    filename = 'C:\\Users\\danii\\Documents\GitHub\\data-ingestion---clusters-report-danielvillam\\clusters_report.txt'
+    filename = 'clusters_report.txt'
     #Se extrae el titulo o encabezado del archivo, teniendo en cuenta que es de dos renglones(filas)
     head = pd.read_fwf(
         filename,
@@ -90,7 +90,4 @@ def ingest_data():
     df['principales_palabras_clave'] = [line.replace(".", "") for line in df['principales_palabras_clave']]
     df['principales_palabras_clave'] = [line[:-1] for line in df['principales_palabras_clave']]
 
-    return df.principales_palabras_clave.to_list()[1] == "support vector machine, long short-term memory, back-propagation neural network, convolution neural network, speed wind prediction, energy consumption, wind power forecasting, extreme learning machine, recurrent-neural-network (rnn), radial basis function (rbf) networks, wind farm"
-
-if __name__ == "__main__":
-    print(ingest_data())
+    return df
